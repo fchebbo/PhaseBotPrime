@@ -1,5 +1,6 @@
 package fc.awesome.phaseBot.discord;
 
+import fc.awesome.phaseBot.discord.messageHandlers.MessageHandler;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 @Component
@@ -32,7 +32,6 @@ public class PhaseBotListenerAdapter extends ListenerAdapter {
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
 
         String message = event.getMessage().getContentRaw().trim();
-
         String[] msgTokens = {};
 
         // Only tokenize if these conditions are met..otherwise just gtfo
@@ -56,7 +55,7 @@ public class PhaseBotListenerAdapter extends ListenerAdapter {
             MessageHandler handler = handlerMap.get(cmd);
             if (handler != null) {
                 handler.handleMessage(event, args);
-            } else if (handlerMap.get("help") != null) {
+            } else if (handlerMap.get("help") != null && msgTokens.length==1) {
                 handlerMap.get("help").handleMessage(event,args);
             }
         }

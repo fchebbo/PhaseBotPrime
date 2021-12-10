@@ -1,5 +1,6 @@
-package fc.awesome.phaseBot.discord;
+package fc.awesome.phaseBot.discord.messageHandlers;
 
+import fc.awesome.phaseBot.discord.utils.PhaseBotUtils;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.springframework.stereotype.Component;
 
@@ -10,11 +11,14 @@ import java.util.Iterator;
 
 @Component
 public class HelpHandler extends MessageHandler {
+    @Override
+    public String getDesc() {
+        return "Literally returns this menu";
+    }
 
     @Override
-    public void setDescAndTrigger() {
-        desc = "Literally returns this menu";
-        trigger = "help";
+    public String getTrigger() {
+        return "help";
     }
 
     @Override
@@ -29,6 +33,6 @@ public class HelpHandler extends MessageHandler {
                 helpStr += botTrigger + " " + handler.getTrigger() +": " + handler.getDesc() +"\n";
             }
             helpStr += "```";
-            event.getChannel().sendMessage(helpStr).queue();
+            PhaseBotUtils.sendDmToAuthor(event,helpStr);
     }
 }
