@@ -18,10 +18,9 @@ public class PhaseBotListenerAdapter extends ListenerAdapter {
 
     public Map<String, MessageHandler> handlerMap = new HashMap<>();
 
-    //blah blah, thread safety, blah blah
-    public synchronized void registerMessageHandler(String handlerTrigger, MessageHandler handler)
+    public String getBotTrigger()
     {
-        handlerMap.put(handlerTrigger,handler);
+        return botTrigger;
     }
 
     /**
@@ -57,7 +56,17 @@ public class PhaseBotListenerAdapter extends ListenerAdapter {
             MessageHandler handler = handlerMap.get(cmd);
             if (handler != null) {
                 handler.handleMessage(event, args);
+            } else if (handlerMap.get("help") != null) {
+                handlerMap.get("help").handleMessage(event,args);
             }
         }
+    }
+
+    // Registers a handler to this adapter
+    // blah blah, thread safety, blah blah
+    public synchronized void registerMessageHandler(String handlerTrigger, MessageHandler handler)
+    {
+        handlerMap.put(handlerTrigger,handler);
+        System.out.println("Added " + handler.getClass().getSimpleName() + " to phaseBotListenerAdapter");
     }
 }

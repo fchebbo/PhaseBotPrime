@@ -22,7 +22,7 @@ public class PhaseBotEventListener implements EventListener {
      */
     @Override
     public void onEvent(@NotNull GenericEvent event) {
-        System.out.println("DEALING WITH EVENT: " + event);
+        //System.out.println("DEALING WITH EVENT: " + event);
         if (event instanceof GuildJoinEvent)
         {
             ((GuildJoinEvent) event).getGuild().getDefaultChannel().sendMessage("YOU EXPECTED A BOT, BUT IT WAS ME DIO! Type \"!pb\" for a list of options").complete();

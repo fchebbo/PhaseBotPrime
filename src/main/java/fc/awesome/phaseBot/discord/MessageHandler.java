@@ -14,6 +14,21 @@ public abstract class MessageHandler {
 
     protected String trigger;
 
+    public MessageHandler()
+    {
+        setDescAndTrigger();
+    }
+
+    public abstract void setDescAndTrigger();
+
+    public String getTrigger()
+    {
+        return trigger;
+    }
+
+    public String getDesc(){
+        return desc;
+    }
     /**
      * Defines what happens when this handler is invoked
      * @param event The event that invoked this handler
