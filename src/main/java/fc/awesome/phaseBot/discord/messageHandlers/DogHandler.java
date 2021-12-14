@@ -5,20 +5,34 @@ import fc.awesome.phaseBot.discord.utils.PhaseBotUtils;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 @Component
-public class FactHandler extends MessageHandler{
+public class DogHandler extends MessageHandler{
+
+    /**
+     * Defines the description of the handler to be used in the help function
+     *
+     * @return the description
+     */
     @Override
     public String getDesc() {
-        return "Sends a fun random fact to the channel";
+        return ": Sends a random dog fact to the channel";
     }
 
+    /**
+     * Defines the trigger to invoke this handler, e.g. "joke"
+     *
+     * @return
+     */
     @Override
     public String getTrigger() {
-        return "fact";
+        return "dog";
     }
 
     @Override
     public void handleMessage(MessageReceivedEvent event, String s) throws JsonProcessingException {
-        event.getChannel().sendMessage(PhaseBotUtils.getFact()).queue();
+        event.getChannel().sendMessage(PhaseBotUtils.getDogFact()).queue();
     }
 }

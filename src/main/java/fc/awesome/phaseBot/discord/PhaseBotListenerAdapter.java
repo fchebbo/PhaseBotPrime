@@ -1,5 +1,6 @@
 package fc.awesome.phaseBot.discord;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import fc.awesome.phaseBot.discord.messageHandlers.MessageHandler;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -18,14 +19,14 @@ public class PhaseBotListenerAdapter extends ListenerAdapter {
 
     public Map<String, MessageHandler> handlerMap = new HashMap<>();
 
-    public String getBotTrigger()
-    {
+    public String getBotTrigger() {
         return botTrigger;
     }
 
     /**
      * Rofl, the abstract class does not fucking have java documentation.  Though, I guess to be fair, this is a
      * simple method
+     *
      * @param event The message receive event to which we can do something with
      */
     @Override
@@ -53,19 +54,23 @@ public class PhaseBotListenerAdapter extends ListenerAdapter {
             }
 
             MessageHandler handler = handlerMap.get(cmd);
-            if (handler != null) {
-                handler.handleMessage(event, args);
-            } else if (handlerMap.get("help") != null && msgTokens.length==1) {
-                handlerMap.get("help").handleMessage(event,args);
+
+            try {
+                if (handler != null) {
+                    handler.handleMessage(event, args);
+                } else if (handlerMap.get("help") != null && msgTokens.length == 1) {
+                    handlerMap.get("help").handleMessage(event, args);
+                }
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
             }
         }
     }
 
     // Registers a handler to this adapter
     // blah blah, thread safety, blah blah
-    public synchronized void registerMessageHandler(String handlerTrigger, MessageHandler handler)
-    {
-        handlerMap.put(handlerTrigger,handler);
+    public synchronized void registerMessageHandler(String handlerTrigger, MessageHandler handler) {
+        handlerMap.put(handlerTrigger, handler);
         System.out.println("Added " + handler.getClass().getSimpleName() + " to phaseBotListenerAdapter");
     }
 }
