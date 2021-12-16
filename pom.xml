@@ -36,6 +36,11 @@
 		</dependency>-->
 		<!-- https://mvnrepository.com/artifact/net.dv8tion/JDA -->
 		<dependency>
+			<groupId>org.twitter4j</groupId>
+			<artifactId>twitter4j-stream</artifactId>
+			<version>4.0.7</version>
+		</dependency>
+		<dependency>
 			<groupId>net.dv8tion</groupId>
 			<artifactId>JDA</artifactId>
 			<version>5.0.0-alpha.2</version>

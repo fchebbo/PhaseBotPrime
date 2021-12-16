@@ -1,3 +1,9 @@
 ---
 discord:
-  token: PUT DA TOKEN HERE
+  token: "KEY HERE"
+twitter:
+  enabled: false
+  consumerKey: "GET THIS BRO"
+  consumerSecret: "GET THIS BRO"
+  accessToken:   "GET THIS BRO"
+  accessTokenSecret:  "GET THIS BRO"
