@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 @Component
-public class DogHandler extends MessageHandler{
+public class DogHandler extends MessageHandler {
 
     /**
      * Defines the description of the handler to be used in the help function

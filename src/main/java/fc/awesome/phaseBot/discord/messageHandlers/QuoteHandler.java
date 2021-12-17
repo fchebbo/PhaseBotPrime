@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class QuoteHandler extends MessageHandler{
+public class QuoteHandler extends MessageHandler {
     /**
      * Defines the description of the handler to be used in the 'help' function
      *

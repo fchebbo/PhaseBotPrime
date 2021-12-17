@@ -24,22 +24,22 @@ public class HelpHandler extends MessageHandler {
     @Override
     public void handleMessage(MessageReceivedEvent event, String s) {
 
-            String botTrigger = phaseBotListenerAdapter.getBotTrigger();
-            String helpStr = "```\n";
-            ArrayList<MessageHandler> newList = new ArrayList<>(phaseBotListenerAdapter.handlerMap.values());
-            //bro we sorting like a champ
-            Collections.sort(newList, Comparator.comparing(MessageHandler::getTrigger));
-            for (Iterator<MessageHandler> it = newList.iterator(); it.hasNext(); ) {
+        String botTrigger = phaseBotListenerAdapter.getBotTrigger();
+        String helpStr = "```\n";
+        ArrayList<MessageHandler> newList = new ArrayList<>(phaseBotListenerAdapter.handlerMap.values());
+        //bro we sorting like a champ
+        Collections.sort(newList, Comparator.comparing(MessageHandler::getTrigger));
+        for (Iterator<MessageHandler> it = newList.iterator(); it.hasNext(); ) {
 
-                MessageHandler handler = it.next();
-                helpStr += botTrigger +
-                        " " +
-                        handler.getTrigger() +
-                        handler.getArgDesc() +
-                        ": " +
-                        handler.getDesc() +"\n";
-            }
-            helpStr += "```";
-            PhaseBotUtils.sendDmToAuthor(event,helpStr);
+            MessageHandler handler = it.next();
+            helpStr += botTrigger +
+                    " " +
+                    handler.getTrigger() +
+                    handler.getArgDesc() +
+                    ": " +
+                    handler.getDesc() + "\n";
+        }
+        helpStr += "```";
+        PhaseBotUtils.sendDmToAuthor(event, helpStr);
     }
 }

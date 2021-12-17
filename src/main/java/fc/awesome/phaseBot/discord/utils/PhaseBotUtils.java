@@ -24,11 +24,10 @@ public class PhaseBotUtils {
         entity = new HttpEntity<>(headers);
     }
 
-    // prevents instantiation, TF you wanna instaniate a util class for?
+    // prevents instantiation, TF you wanna instantiate a util class for?
     private PhaseBotUtils() {
     }
 
-    ;
 
     /**
      * Returns a map containing the JSON response of a request
@@ -103,13 +102,13 @@ public class PhaseBotUtils {
         }
     }
 
-    public static String getNorris() throws JsonProcessingException{
-        Map<?,?> responseMap = PhaseBotUtils.getJsonRestResponse("http://api.icndb.com/jokes/random");
+    public static String getNorris() throws JsonProcessingException {
+        Map<?, ?> responseMap = PhaseBotUtils.getJsonRestResponse("http://api.icndb.com/jokes/random");
 
-        return (String)((Map) responseMap.get("value")).get("joke");
+        return (String) ((Map) responseMap.get("value")).get("joke");
     }
 
-    public static String getQuote () throws JsonProcessingException{
+    public static String getQuote() throws JsonProcessingException {
         Map<?, ?> responseMap = PhaseBotUtils.getJsonRestResponse("https://api.quotable.io/random");
         return "`" + (String) responseMap.get("content") + "`\n" +
                 "*---" + (String) responseMap.get("author") + "*";

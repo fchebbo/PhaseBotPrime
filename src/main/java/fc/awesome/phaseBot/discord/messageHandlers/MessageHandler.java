@@ -17,8 +17,7 @@ public abstract class MessageHandler {
     /**
      * Allows you to add args to the help desc, useful for cases where the command has arguments
      **/
-    public String getArgDesc()
-    {
+    public String getArgDesc() {
         return "";
     }
 

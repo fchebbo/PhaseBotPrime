@@ -9,8 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RollHandler extends MessageHandler {
 
     @Override
-    public String getArgDesc()
-    {
+    public String getArgDesc() {
         return "**<Number (optional)>**";
     }
 
@@ -39,12 +38,11 @@ public class RollHandler extends MessageHandler {
         int highEnd;
         try {
             highEnd = Integer.parseInt(numberStr);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             highEnd = 100;
         }
 
         event.getChannel().sendMessage(event.getAuthor().getAsMention() + " rolls " +
-                ThreadLocalRandom.current().nextInt(1, highEnd + 1)+ " (1-" + highEnd +")").queue();
+                ThreadLocalRandom.current().nextInt(1, highEnd + 1) + " (1-" + highEnd + ")").queue();
     }
 }

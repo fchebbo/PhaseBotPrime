@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CatHandler extends MessageHandler{
+public class CatHandler extends MessageHandler {
     @Override
     public String getDesc() {
         return "Sends a random cat fact to the channel";

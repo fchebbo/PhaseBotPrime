@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FactHandler extends MessageHandler{
+public class FactHandler extends MessageHandler {
     @Override
     public String getDesc() {
         return "Sends a fun random fact to the channel";

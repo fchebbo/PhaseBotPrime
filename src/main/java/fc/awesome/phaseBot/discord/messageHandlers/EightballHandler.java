@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 //TODO: HOW DO I MAKE THE @COMPONENT ANNOTATION INHERITABLE. Once should be enough ffs
 // WE WANT TO MAKE OUR CODE AS DRY AF FFS HAVING TO REPEAT COMPONENT IS NOT DRY ENOUGH, THIS REQUIRES A TOWEL
 @Component
-public class EightballHandler extends MessageHandler{
+public class EightballHandler extends MessageHandler {
     /**
      * Tells you if the response is good, bad or neutral
      */
@@ -54,7 +54,6 @@ public class EightballHandler extends MessageHandler{
     };
 
 
-
     /**
      * Defines the description of the handler to be used in the help function
      *
@@ -78,15 +77,14 @@ public class EightballHandler extends MessageHandler{
     @Override
     public void handleMessage(MessageReceivedEvent event, String question) {
         question = question.trim();
-        if (question.isEmpty())
-        {
-            PhaseBotUtils.sendDmToAuthor(event,"Invalid use of 8ball command, must be in the form of !8ball <question>.  Example:\n"
+        if (question.isEmpty()) {
+            PhaseBotUtils.sendDmToAuthor(event, "Invalid use of 8ball command, must be in the form of !8ball <question>.  Example:\n"
                     + "!pb 8ball will I ever give you up?");
             return;
         }
 
         BallResponse response = ballResponses[ThreadLocalRandom.current().nextInt(0, ballResponses.length)];
-        question = "**" + question.substring(0, Math.min(question.length(), 200)).replace("*","") + "**";
+        question = "**" + question.substring(0, Math.min(question.length(), 200)).replace("*", "") + "**";
         String answerString =
                 event.getAuthor().getAsMention() + " asks: " + question + "\n" + //This is the question line
                         ballActions[ThreadLocalRandom.current().nextInt(0, ballActions.length)] +  // This is the Ball action
@@ -97,41 +95,34 @@ public class EightballHandler extends MessageHandler{
     /**
      * This makes the text change colors!!
      * TODO: MOVE THIS TO UTIL CLASS IF IT EVER HAS ADDITIONAL USE!!
+     *
      * @param type
      * @param Answer
      * @return
      */
-    private static String padAnswer(Type type, String Answer)
-    {
-        if (type == Type.CONTRARY)
-        {
+    private static String padAnswer(Type type, String Answer) {
+        if (type == Type.CONTRARY) {
             return "```diff\n" +
                     "- " + Answer + "\n" +
                     "```";
-        }
-        else if (type == Type.NEUTRAL)
-        {
+        } else if (type == Type.NEUTRAL) {
             return "```fix\n" +
                     Answer + "\n" +
                     "```";
-        }
-        else
-        {
+        } else {
             return "```diff\n" +
                     "+ " + Answer + "\n" +
                     "```";
         }
     }
 
-    private static class BallResponse
-    {
+    private static class BallResponse {
         public Type type;
         public String answer;
 
-        public BallResponse(Type type,String answer)
-        {
-            this.type=type;
-            this.answer=answer;
+        public BallResponse(Type type, String answer) {
+            this.type = type;
+            this.answer = answer;
         }
     }
 }

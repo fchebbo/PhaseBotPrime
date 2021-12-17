@@ -1,6 +1,5 @@
 package fc.awesome.phaseBot.twitter;
 
-import com.neovisionaries.ws.client.WebSocketFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -14,12 +13,11 @@ import javax.annotation.PostConstruct;
 import javax.security.auth.login.LoginException;
 
 
-
 @Component
 @ConditionalOnProperty
-        (value="twitter.enabled",
-        havingValue = "true",
-        matchIfMissing = false)
+        (value = "twitter.enabled",
+                havingValue = "true",
+                matchIfMissing = false)
 public class TwitterClient {
 
     @Value("${twitter.consumerKey}")
@@ -34,8 +32,9 @@ public class TwitterClient {
     @Value("${twitter.accessTokenSecret}")
     String accessTokenSecret;
 
-    public TwitterClient()
-    {
+    private Twitter twitter;
+
+    public TwitterClient() {
         System.out.println("SUPBRO");
     }
 
@@ -52,8 +51,14 @@ public class TwitterClient {
                 .setOAuthAccessTokenSecret(accessTokenSecret);
         TwitterFactory tf = new TwitterFactory(cb.build());
 
-        Twitter twitter = tf.getInstance();
-        Status status = twitter.updateStatus("Hello World");
-        System.out.println(status.getText());
+        twitter = tf.getInstance();
+    }
+
+    public Status tweet(String text) throws TwitterException {
+        return twitter.updateStatus(text);
+    }
+
+    public static String getUrlOfStatus(Status status) {
+        return "https://twitter.com/" + status.getUser().getScreenName() + "/status/" + status.getId();
     }
 }

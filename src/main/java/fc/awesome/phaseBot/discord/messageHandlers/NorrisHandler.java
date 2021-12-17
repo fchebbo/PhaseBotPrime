@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NorrisHandler extends MessageHandler{
+public class NorrisHandler extends MessageHandler {
     @Override
     public String getDesc() {
         return "Sends a random 'Chuck Norris' joke to the channel (YES HE'S BACK!!)";
