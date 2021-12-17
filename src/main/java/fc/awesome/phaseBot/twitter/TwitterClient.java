@@ -34,10 +34,6 @@ public class TwitterClient {
 
     private Twitter twitter;
 
-    public TwitterClient() {
-        System.out.println("SUPBRO");
-    }
-
     // This now gets run after setup, pretty neat I guess
     @PostConstruct
     private void startup() throws LoginException, TwitterException {
