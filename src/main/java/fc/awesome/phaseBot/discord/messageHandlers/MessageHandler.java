@@ -1,6 +1,7 @@
 package fc.awesome.phaseBot.discord.messageHandlers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import discord4j.core.event.domain.message.MessageCreateEvent;
 import fc.awesome.phaseBot.discord.PhaseBotListenerAdapter;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ public abstract class MessageHandler {
      */
     public abstract void handleMessage(MessageReceivedEvent event, String s) throws JsonProcessingException;
 
+    public abstract void handleMessageEvent(MessageCreateEvent event, String s) throws JsonProcessingException;
     @PostConstruct
     private void registerHandler() {
         phaseBotListenerAdapter.registerMessageHandler(getTrigger(), this);
