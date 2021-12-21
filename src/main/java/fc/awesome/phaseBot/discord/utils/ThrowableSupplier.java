@@ -1,6 +1,5 @@
 package fc.awesome.phaseBot.discord.utils;
 
-
 /**
  * Makes writing lambdas with expressions simple 1-liners
  * @param <T> The type to return

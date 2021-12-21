@@ -26,6 +26,11 @@ public class PhaseBotListenerAdapter extends ListenerAdapter {
         return botTrigger;
     }
 
+    public PhaseBotListenerAdapter()
+    {
+        logger.info("Initialized PhaseBotListenerAdapter!");
+    }
+
     /**
      * Rofl, the abstract class does not fucking have java documentation.  Though, I guess to be fair, this is a
      * simple method
@@ -65,6 +70,7 @@ public class PhaseBotListenerAdapter extends ListenerAdapter {
             }
         }
     }
+
 
     // Registers a handler to this adapter
     // blah blah, thread safety, blah blah

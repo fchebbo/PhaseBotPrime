@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.logging.Logger;
 
 @Component
 public abstract class MessageHandler {
@@ -14,6 +15,9 @@ public abstract class MessageHandler {
     @Autowired
     PhaseBotListenerAdapter phaseBotListenerAdapter;
 
+    public MessageHandler(){
+        Logger.getLogger(this.getClass().getSimpleName()).info("Starting: " + this.getClass().getSimpleName());
+    }
     /**
      * Allows you to add args to the help desc, useful for cases where the command has arguments
      **/

@@ -1,15 +1,19 @@
 package fc.awesome.phaseBot.discord;
 
+import fc.awesome.phaseBot.twitter.TwitterClient;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PhaseBotEventListener implements EventListener {
+    static org.slf4j.Logger logger = LoggerFactory.getLogger(PhaseBotEventListener.class);
+
     /**
      * Handles any {@link GenericEvent GenericEvent}.
      *
@@ -18,6 +22,10 @@ public class PhaseBotEventListener implements EventListener {
      *
      * @param event The Event to handle.
      */
+    public PhaseBotEventListener()
+    {
+        logger.info("Inizialized phaseBotEventListener!");
+    }
     @Override
     public void onEvent(@NotNull GenericEvent event) {
         //System.out.println("DEALING WITH EVENT: " + event);

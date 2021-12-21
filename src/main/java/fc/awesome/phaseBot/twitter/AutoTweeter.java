@@ -39,8 +39,8 @@ public class AutoTweeter {
     // We have to use # before $ here so that we can parse things like 1000 * 60
     @Scheduled(fixedDelayString = "#{${twitter.autoTweet.postRate}}", initialDelay = 1000)
     public void autoTweet() throws JsonProcessingException, TwitterException {
-        Status status = twitterClient.tweet(autoTweets[ThreadLocalRandom.current().nextInt(autoTweets.length)].get());
-        logger.info("Posted Tweet!: " + TwitterClient.getUrlOfStatus(status));
+        //Status status = twitterClient.tweet(autoTweets[ThreadLocalRandom.current().nextInt(autoTweets.length)].get());
+        //logger.info("Posted Tweet!: " + TwitterClient.getUrlOfStatus(status));
     }
 }
 
