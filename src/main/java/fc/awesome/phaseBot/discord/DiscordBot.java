@@ -38,8 +38,6 @@ public class DiscordBot {
     @Bean
     public GatewayDiscordClient gatewayDiscordClient(MessageHandler [] handlers) throws LoginException {
         logger.info("Starting discord bot!");
-        System.out.println(discordToken);
-
         GatewayDiscordClient client = DiscordClientBuilder.create(discordToken)
                 .build()
                 .login()
@@ -58,7 +56,9 @@ public class DiscordBot {
                 .filter(messageCreateEvent -> messageCreateEvent.getMessage().getAuthor().map(user->!user.isBot()).orElse(false))
                 .filter(messageCreateEvent -> messageCreateEvent.getMessage().getContent().startsWith(discordTrigger))
                 .log()
-                .subscribe(messageCreateEvent -> phaseBotListenerAdapter.onMessageReceived(messageCreateEvent));
+                .subscribe(messageCreateEvent -> phaseBotListenerAdapter.onMessageReceived(messageCreateEvent),
+                            e -> System.out.println("Error: " + e),
+                            () -> System.out.println("DONEZO"));
 
         return client;
     }
