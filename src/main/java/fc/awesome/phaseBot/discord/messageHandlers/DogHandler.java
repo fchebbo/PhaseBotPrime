@@ -1,14 +1,11 @@
 package fc.awesome.phaseBot.discord.messageHandlers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import discord4j.core.event.domain.message.MessageCreateEvent;
 import fc.awesome.phaseBot.discord.utils.PhaseBotUtils;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Map;
-
-@Component
+@Service
 public class DogHandler extends MessageHandler {
 
     /**
@@ -32,7 +29,7 @@ public class DogHandler extends MessageHandler {
     }
 
     @Override
-    public void handleMessage(MessageReceivedEvent event, String s) throws JsonProcessingException {
-        event.getChannel().sendMessage(PhaseBotUtils.getDogFact()).queue();
+    public void handleMessageEvent(MessageCreateEvent event, String s) throws JsonProcessingException {
+        event.getMessage().getChannel().block().createMessage(PhaseBotUtils.getDogFact()).block();
     }
 }

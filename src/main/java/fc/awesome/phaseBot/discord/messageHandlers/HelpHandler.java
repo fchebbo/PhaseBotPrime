@@ -1,15 +1,16 @@
 package fc.awesome.phaseBot.discord.messageHandlers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import discord4j.core.event.domain.message.MessageCreateEvent;
 import fc.awesome.phaseBot.discord.utils.PhaseBotUtils;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
-@Component
+@Service
 public class HelpHandler extends MessageHandler {
     @Override
     public String getDesc() {
@@ -22,7 +23,7 @@ public class HelpHandler extends MessageHandler {
     }
 
     @Override
-    public void handleMessage(MessageReceivedEvent event, String s) {
+    public void handleMessageEvent(MessageCreateEvent event, String s) throws JsonProcessingException {
 
         String botTrigger = phaseBotListenerAdapter.getBotTrigger();
         String helpStr = "```\n";

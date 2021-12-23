@@ -3,21 +3,21 @@ package fc.awesome.phaseBot.discord;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.message.MessageCreateEvent;
-import fc.awesome.phaseBot.twitter.AutoTweeter;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Activity;
+import fc.awesome.phaseBot.discord.messageHandlers.MessageHandler;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
 import javax.security.auth.login.LoginException;
-import java.util.logging.Logger;
+import java.util.Locale;
 
-@Component
+@Configuration
 public class DiscordBot {
+    @Value("${discord.trigger:!pb}")
+    private String discordTrigger;
+
     @Value("${discord.token}")
     private String discordToken;
 
@@ -30,28 +30,36 @@ public class DiscordBot {
     @Autowired
     PhaseBotListenerAdapter phaseBotListenerAdapter;
 
-    @Autowired
-    PhaseBotEventListener phaseBotEventListener;
-
     public DiscordBot() {
         System.out.println("I Started");
     }
 
     // This now gets run after setup, pretty neat I guess
-    @PostConstruct
-    private void startup() throws LoginException {
+    @Bean
+    public GatewayDiscordClient gatewayDiscordClient(MessageHandler [] handlers) throws LoginException {
         logger.info("Starting discord bot!");
         System.out.println(discordToken);
-        //JDA jda = JDABuilder.createDefault(discordToken).
-       //         addEventListeners(phaseBotEventListener, phaseBotListenerAdapter).
-       //         setWebsocketFactory(null).
-       //         build();
-       // jda.getPresence().setActivity(Activity.playing(discordActivity));
+
         GatewayDiscordClient client = DiscordClientBuilder.create(discordToken)
                 .build()
                 .login()
                 .block();
-        System.out.println("Discord Bot started!");
-        client.on(MessageCreateEvent.class).subscribe(event -> phaseBotListenerAdapter.onMessageReceived(event));
+
+        logger.info("Discord bot online!");
+
+        System.out.println(handlers);
+
+        for (MessageHandler handler : handlers) {
+            phaseBotListenerAdapter.registerMessageHandler(handler);
+        }
+
+        // This is legit crazy, holy shit.  Reactive programming
+        client.on(MessageCreateEvent.class)
+                .filter(messageCreateEvent -> messageCreateEvent.getMessage().getAuthor().map(user->!user.isBot()).orElse(false))
+                .filter(messageCreateEvent -> messageCreateEvent.getMessage().getContent().startsWith(discordTrigger))
+                .log()
+                .subscribe(messageCreateEvent -> phaseBotListenerAdapter.onMessageReceived(messageCreateEvent));
+
+        return client;
     }
 }

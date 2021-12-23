@@ -2,7 +2,7 @@ package fc.awesome.phaseBot.discord.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import discord4j.core.event.domain.message.MessageCreateEvent;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -54,12 +54,8 @@ public class PhaseBotUtils {
         return k.getStatusCode() == HttpStatus.OK;
     }
 
-    public static void sendDmToAuthor(MessageReceivedEvent event, String msg) {
-        // this weird thing is what enables us to whisper a user...//TODO (PERHAPS) make this a helper method
-        event.getAuthor().openPrivateChannel().queue((channel) ->
-        {
-            channel.sendMessage(msg).queue();
-        });
+    public static void sendDmToAuthor(MessageCreateEvent event, String msg) {
+        event.getMessage().getAuthor().get().getPrivateChannel().block().createMessage(msg).block();
     }
 
     public static String getDogFact() throws JsonProcessingException {

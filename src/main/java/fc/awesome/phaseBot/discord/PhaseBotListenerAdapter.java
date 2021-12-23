@@ -2,17 +2,12 @@ package fc.awesome.phaseBot.discord;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import discord4j.core.event.domain.message.MessageCreateEvent;
-import discord4j.core.object.entity.Message;
 import fc.awesome.phaseBot.discord.messageHandlers.MessageHandler;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,20 +35,13 @@ public class PhaseBotListenerAdapter {
      *
      * @param event The message receive event to which we can do something with
      */
-    public void onMessageReceived(@Nonnull MessageCreateEvent event) {
+    public void onMessageReceived(MessageCreateEvent event) {
 
         String message = event.getMessage().getContent();
-        String[] msgTokens = {};
-
-        // Only tokenize if these conditions are met..otherwise just gtfo
-        if (!event.getMessage().getAuthor().get().isBot() && (message.toLowerCase().startsWith(botTrigger.toLowerCase()))) {
-            msgTokens = message.split(" ", 3);
-        } else {
-            return;
-        }
+        String[] msgTokens = message.split(" ", 3);
 
         // using toLoserCase, to save headaches
-        if (msgTokens.length > 0 && msgTokens[0].equals(botTrigger)) {
+        if (msgTokens.length > 0) {
 
             // using toLowercase because i don't want confusion of "catfact" vs "catFact"
             String cmd = (msgTokens.length > 1) ? msgTokens[1].toLowerCase() : "help";
@@ -74,9 +62,9 @@ public class PhaseBotListenerAdapter {
     }
 
     // Registers a handler to this adapter
-    // blah blah, thread safety, blah blah
-    public synchronized void registerMessageHandler(String handlerTrigger, MessageHandler handler) {
-        handlerMap.put(handlerTrigger, handler);
+    // Using synchronized due to thread safety I guess
+    public synchronized void registerMessageHandler(MessageHandler handler) {
+        handlerMap.put(handler.getTrigger(), handler);
         logger.info("Added " + handler.getClass().getSimpleName() + " to phaseBotListenerAdapter");
     }
 }

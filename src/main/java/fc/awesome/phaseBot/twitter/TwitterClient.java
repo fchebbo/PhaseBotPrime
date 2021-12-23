@@ -1,7 +1,5 @@
 package fc.awesome.phaseBot.twitter;
 
-import fc.awesome.phaseBot.discord.DiscordBot;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -61,7 +59,7 @@ public class TwitterClient {
         return twitter.updateStatus(text);
     }
 
-    public static  String getUrlOfStatus(@NotNull Status status) {
+    public static  String getUrlOfStatus(Status status) {
         return "https://twitter.com/" + status.getUser().getScreenName() + "/status/" + status.getId();
     }
 }

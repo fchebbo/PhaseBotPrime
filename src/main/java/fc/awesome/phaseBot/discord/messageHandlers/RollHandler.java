@@ -1,11 +1,13 @@
 package fc.awesome.phaseBot.discord.messageHandlers;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import discord4j.core.event.domain.message.MessageCreateEvent;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-@Component
+@Service
 public class RollHandler extends MessageHandler {
 
     @Override
@@ -34,15 +36,14 @@ public class RollHandler extends MessageHandler {
     }
 
     @Override
-    public void handleMessage(MessageReceivedEvent event, String numberStr) {
+    public void handleMessageEvent(MessageCreateEvent event, String numberStr) throws JsonProcessingException {
         int highEnd;
         try {
             highEnd = Integer.parseInt(numberStr);
         } catch (NumberFormatException e) {
             highEnd = 100;
         }
-
-        event.getChannel().sendMessage(event.getAuthor().getAsMention() + " rolls " +
-                ThreadLocalRandom.current().nextInt(1, highEnd + 1) + " (1-" + highEnd + ")").queue();
+        event.getMessage().getChannel().block().createMessage(event.getMessage().getAuthor().get().getMention() + " rolls " +
+                ThreadLocalRandom.current().nextInt(1, highEnd + 1) + " (1-" + highEnd + ")").block();
     }
 }

@@ -3,14 +3,12 @@ package fc.awesome.phaseBot.discord.messageHandlers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import fc.awesome.phaseBot.discord.PhaseBotListenerAdapter;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.logging.Logger;
 
-@Component
+@Service
 public abstract class MessageHandler {
 
     @Autowired
@@ -37,16 +35,10 @@ public abstract class MessageHandler {
     public abstract String getTrigger();
 
     /**
-     * Defines what happens when this handler is invoked
-     *
-     * @param event The event that invoked this handler
-     * @param s     Anything that the user sent that wasn't the command itself (not always used)
+     * Abstract method to handle this message event!
+     * @param event The event
+     * @param s the string to do stuff with
+     * @throws JsonProcessingException
      */
-    public abstract void handleMessage(MessageReceivedEvent event, String s) throws JsonProcessingException;
-
     public abstract void handleMessageEvent(MessageCreateEvent event, String s) throws JsonProcessingException;
-    @PostConstruct
-    private void registerHandler() {
-        phaseBotListenerAdapter.registerMessageHandler(getTrigger(), this);
-    }
 }

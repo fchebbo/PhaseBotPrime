@@ -1,9 +1,10 @@
 package fc.awesome.phaseBot.discord.messageHandlers;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import discord4j.core.event.domain.message.MessageCreateEvent;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class TestHandler extends MessageHandler{
     public TestHandler()
     {
@@ -20,7 +21,8 @@ public class TestHandler extends MessageHandler{
     }
 
     @Override
-    public void handleMessage(MessageReceivedEvent event, String s) {
-        event.getChannel().sendMessage("This actually works, springing into action MOFO").queue();
+    public void handleMessageEvent(MessageCreateEvent event, String s) throws JsonProcessingException {
+        event.getMessage().getChannel().block().createMessage("OH GOD HOW DO I REACT").block();
+        throw new JsonProcessingException("TEST"){};
     }
 }

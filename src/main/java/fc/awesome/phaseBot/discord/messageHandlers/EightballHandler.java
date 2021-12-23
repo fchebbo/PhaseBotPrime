@@ -1,14 +1,15 @@
 package fc.awesome.phaseBot.discord.messageHandlers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import discord4j.core.event.domain.message.MessageCreateEvent;
 import fc.awesome.phaseBot.discord.utils.PhaseBotUtils;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 //TODO: HOW DO I MAKE THE @COMPONENT ANNOTATION INHERITABLE. Once should be enough ffs
 // WE WANT TO MAKE OUR CODE AS DRY AF FFS HAVING TO REPEAT COMPONENT IS NOT DRY ENOUGH, THIS REQUIRES A TOWEL
-@Component
+@Service
 public class EightballHandler extends MessageHandler {
     /**
      * Tells you if the response is good, bad or neutral
@@ -53,7 +54,6 @@ public class EightballHandler extends MessageHandler {
 
     };
 
-
     /**
      * Defines the description of the handler to be used in the help function
      *
@@ -75,7 +75,7 @@ public class EightballHandler extends MessageHandler {
     }
 
     @Override
-    public void handleMessage(MessageReceivedEvent event, String question) {
+    public void handleMessageEvent(MessageCreateEvent event, String question) throws JsonProcessingException {
         question = question.trim();
         if (question.isEmpty()) {
             PhaseBotUtils.sendDmToAuthor(event, "Invalid use of 8ball command, must be in the form of !8ball <question>.  Example:\n"
@@ -86,11 +86,12 @@ public class EightballHandler extends MessageHandler {
         BallResponse response = ballResponses[ThreadLocalRandom.current().nextInt(0, ballResponses.length)];
         question = "**" + question.substring(0, Math.min(question.length(), 200)).replace("*", "") + "**";
         String answerString =
-                event.getAuthor().getAsMention() + " asks: " + question + "\n" + //This is the question line
+                event.getMessage().getAuthor().get().getMention() + " asks: " + question + "\n" + //This is the question line
                         ballActions[ThreadLocalRandom.current().nextInt(0, ballActions.length)] +  // This is the Ball action
                         padAnswer(response.type, response.answer);
-        event.getChannel().sendMessage(answerString).queue();
+        event.getMessage().getChannel().block().createMessage(answerString).block();
     }
+
 
     /**
      * This makes the text change colors!!
