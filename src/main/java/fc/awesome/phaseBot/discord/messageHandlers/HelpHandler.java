@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import fc.awesome.phaseBot.discord.utils.PhaseBotUtils;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +24,7 @@ public class HelpHandler extends MessageHandler {
     }
 
     @Override
-    public void handleMessageEvent(MessageCreateEvent event, String s) throws JsonProcessingException {
+    public Mono<Void> handleMessageEvent(MessageCreateEvent event, String s) throws JsonProcessingException {
 
         String botTrigger = phaseBotListenerAdapter.getBotTrigger();
         String helpStr = "```\n";
@@ -41,6 +42,6 @@ public class HelpHandler extends MessageHandler {
                     handler.getDesc() + "\n";
         }
         helpStr += "```";
-        PhaseBotUtils.sendDmToAuthor(event, helpStr);
+        return PhaseBotUtils.sendDmToAuthor(event, helpStr);
     }
 }

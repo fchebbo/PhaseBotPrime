@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class PhaseBotListenerAdapter {
      *
      * @param event The message receive event to which we can do something with
      */
-    public void onMessageReceived(MessageCreateEvent event) {
+    public Mono<Void> onMessageReceived(MessageCreateEvent event) {
 
         String message = event.getMessage().getContent();
         String[] msgTokens = message.split(" ", 3);
@@ -51,14 +52,15 @@ public class PhaseBotListenerAdapter {
 
             try {
                 if (handler != null) {
-                    handler.handleMessageEvent(event, args);
+                    return handler.handleMessageEvent(event, args);
                 } else if (handlerMap.get("help") != null && msgTokens.length == 1) {
-                    handlerMap.get("help").handleMessageEvent(event, args);
+                    return handlerMap.get("help").handleMessageEvent(event, args);
                 }
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
         }
+        return Mono.empty();
     }
 
     // Registers a handler to this adapter

@@ -3,15 +3,16 @@ package fc.awesome.phaseBot.discord;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.entity.Message;
 import fc.awesome.phaseBot.discord.messageHandlers.MessageHandler;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import reactor.core.publisher.Mono;
 
 import javax.security.auth.login.LoginException;
-import java.util.Locale;
 
 @Configuration
 public class DiscordBot {
@@ -56,10 +57,18 @@ public class DiscordBot {
                 .filter(messageCreateEvent -> messageCreateEvent.getMessage().getAuthor().map(user->!user.isBot()).orElse(false))
                 .filter(messageCreateEvent -> messageCreateEvent.getMessage().getContent().startsWith(discordTrigger))
                 .log()
-                .subscribe(messageCreateEvent -> phaseBotListenerAdapter.onMessageReceived(messageCreateEvent),
-                            e -> System.out.println("Error: " + e),
-                            () -> System.out.println("DONEZO"));
-
+                .flatMap(phaseBotListenerAdapter:: onMessageReceived)
+                .subscribe();
         return client;
     }
+
+    //public Mono<Void> processCommand(MessageCreateEvent eventMessage) {
+        //return Mono.just(eventMessage)
+         //       .filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
+       //         .filter(message -> message.getContent().equalsIgnoreCase("!todo"))
+     //           .flatMap(Message::getChannel)
+   //             .flatMap(channel -> channel.createMessage("Things to do today:\n - write a bot\n - eat lunch\n - play a game"))
+  //              .then();
+//    }
 }
+

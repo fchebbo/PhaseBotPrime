@@ -3,8 +3,10 @@ package fc.awesome.phaseBot.discord.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.entity.Message;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,8 +56,12 @@ public class PhaseBotUtils {
         return k.getStatusCode() == HttpStatus.OK;
     }
 
-    public static void sendDmToAuthor(MessageCreateEvent event, String msg) {
-        event.getMessage().getAuthor().get().getPrivateChannel().block().createMessage(msg).block();
+    public static Mono<Void> sendDmToAuthor(MessageCreateEvent event, String msg) {
+
+        return Mono.just(event.getMessage())
+                .map(Message::getAuthor)
+                .flatMap(author->author.get().getPrivateChannel())
+                .flatMap(c->c.createMessage(msg)).then();
     }
 
     public static String getDogFact() throws JsonProcessingException {

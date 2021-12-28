@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
@@ -36,19 +37,18 @@ public class TwitterHandler extends MessageHandler {
     }
 
     @Override
-    public void handleMessageEvent(MessageCreateEvent event, String s) throws JsonProcessingException {
+    public Mono<Void> handleMessageEvent(MessageCreateEvent event, String s) throws JsonProcessingException {
         if (s.isEmpty()) {
-            PhaseBotUtils.sendDmToAuthor(event, "Invalid use of tweet command, must be in the form of tweet.  \n" +
+            return PhaseBotUtils.sendDmToAuthor(event, "Invalid use of tweet command, must be in the form of tweet.  \n" +
                     "Example: '!pb tweet Phase is the best");
-            return;
         }
 
         try {
             Status status = twitterClient.tweet(s);
-            event.getMessage().getChannel().block().createMessage("Tweeted! : " + TwitterClient.getUrlOfStatus(status)).block();
+            return event.getMessage().getChannel().block().createMessage("Tweeted! : " + TwitterClient.getUrlOfStatus(status)).then();
         } catch (TwitterException e) {
             logger.error(e.getMessage());
-            PhaseBotUtils.sendDmToAuthor(event, "Something broke, please message phase the following: " + e.getMessage());
+            return PhaseBotUtils.sendDmToAuthor(event, "Something broke, please message phase the following: " + e.getMessage());
         }
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -36,14 +37,14 @@ public class RollHandler extends MessageHandler {
     }
 
     @Override
-    public void handleMessageEvent(MessageCreateEvent event, String numberStr) throws JsonProcessingException {
+    public Mono<Void> handleMessageEvent(MessageCreateEvent event, String numberStr) throws JsonProcessingException {
         int highEnd;
         try {
             highEnd = Integer.parseInt(numberStr);
         } catch (NumberFormatException e) {
             highEnd = 100;
         }
-        event.getMessage().getChannel().block().createMessage(event.getMessage().getAuthor().get().getMention() + " rolls " +
-                ThreadLocalRandom.current().nextInt(1, highEnd + 1) + " (1-" + highEnd + ")").block();
+        return event.getMessage().getChannel().block().createMessage(event.getMessage().getAuthor().get().getMention() + " rolls " +
+                ThreadLocalRandom.current().nextInt(1, highEnd + 1) + " (1-" + highEnd + ")").then();
     }
 }

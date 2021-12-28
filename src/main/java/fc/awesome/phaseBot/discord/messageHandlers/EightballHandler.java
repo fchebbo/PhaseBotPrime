@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import fc.awesome.phaseBot.discord.utils.PhaseBotUtils;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -75,12 +76,12 @@ public class EightballHandler extends MessageHandler {
     }
 
     @Override
-    public void handleMessageEvent(MessageCreateEvent event, String question) throws JsonProcessingException {
+    public Mono<Void> handleMessageEvent(MessageCreateEvent event, String question) throws JsonProcessingException {
         question = question.trim();
         if (question.isEmpty()) {
-            PhaseBotUtils.sendDmToAuthor(event, "Invalid use of 8ball command, must be in the form of !8ball <question>.  Example:\n"
+            return PhaseBotUtils.sendDmToAuthor(event, "Invalid use of 8ball command, must be in the form of !8ball <question>.  Example:\n"
                     + "!pb 8ball will I ever give you up?");
-            return;
+
         }
 
         BallResponse response = ballResponses[ThreadLocalRandom.current().nextInt(0, ballResponses.length)];
@@ -89,7 +90,7 @@ public class EightballHandler extends MessageHandler {
                 event.getMessage().getAuthor().get().getMention() + " asks: " + question + "\n" + //This is the question line
                         ballActions[ThreadLocalRandom.current().nextInt(0, ballActions.length)] +  // This is the Ball action
                         padAnswer(response.type, response.answer);
-        event.getMessage().getChannel().block().createMessage(answerString).block();
+        return event.getMessage().getChannel().block().createMessage(answerString).then();
     }
 
 

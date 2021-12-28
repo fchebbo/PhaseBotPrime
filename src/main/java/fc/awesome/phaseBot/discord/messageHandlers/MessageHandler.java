@@ -5,6 +5,7 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import fc.awesome.phaseBot.discord.PhaseBotListenerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.logging.Logger;
 
@@ -40,5 +41,5 @@ public abstract class MessageHandler {
      * @param s the string to do stuff with
      * @throws JsonProcessingException
      */
-    public abstract void handleMessageEvent(MessageCreateEvent event, String s) throws JsonProcessingException;
+    public abstract Mono<Void> handleMessageEvent(MessageCreateEvent event, String s) throws JsonProcessingException;
 }
